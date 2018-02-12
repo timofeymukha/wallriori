@@ -7,7 +7,7 @@ large-eddy simulation.
 Legal information
 -----------------
 
-Turbulucid is free software and is provided under the MIT Licence, which is
+Wallriori is free software and is provided under the MIT Licence, which is
 as follows.
 
 Copyright (c) 2018 Timofey Mukha
