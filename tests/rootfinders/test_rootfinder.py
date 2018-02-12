@@ -13,6 +13,13 @@ def f(x):
     return x
 
 
+def test_rootfinder_init_default():
+    rootFinder = rootfinders.RootFinder()
+    assert rootFinder.eps == 0.01
+    assert rootFinder.maxIter == 10
+    assert rootFinder.debug is False
+
+
 def test_rootfinder_init():
     rootFinder = rootfinders.RootFinder(f, f, 10, 0.01)
     assert rootFinder.eps == 0.01
@@ -30,3 +37,11 @@ def test_rootfinder_mutable():
     assert rootFinder.eps == 0.001
     assert rootFinder.maxIter == 1
     assert rootFinder.debug is True
+
+
+def test_rootfinder_function_mutable():
+    def g(x):
+        return 10
+    rootFinder = rootfinders.RootFinder(f, f, 10, 0.01)
+    rootFinder.f = g
+    assert rootFinder.f(1) == 10

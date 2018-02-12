@@ -10,11 +10,14 @@ from wallriori.wallmodels import WallModel
 
 
 def test_wallmodel_init():
-    w = WallModel(0.01)
+    w = WallModel(0.01, 1e-4)
     assert w.h == 0.01
+    assert w.nu == 1e-4
 
 
 def test_wallmodel_mutable():
-    w = WallModel(0.01)
+    w = WallModel(0.01, 1e-4)
     w.h = 2
+    w.nu = 2
     assert w.h == 2
+    assert w.nu == 2

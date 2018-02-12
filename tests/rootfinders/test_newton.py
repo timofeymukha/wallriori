@@ -18,6 +18,10 @@ def d(x):
     return 2*x
 
 
+def test_newton_init_default():
+    newton = Newton()
+
+
 def test_newton_init():
     newton = Newton(f, f, 10, 0.01)
 
