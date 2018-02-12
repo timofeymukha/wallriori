@@ -3,7 +3,8 @@
 # The code is released under the MIT Licence.
 # See LICENCE.txt and the Legal section in the README for more information
 
-from .rootfinders import *
+from .problems import *
 
-__all__ = ["rootfinders"]
-__all__.extend(rootfinders.__all__)
+
+__all__ = ["problems"]
+__all__.extend(problems.__all__)
