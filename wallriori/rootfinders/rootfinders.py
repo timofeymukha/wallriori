@@ -10,15 +10,18 @@ import numpy as np
 
 __all__ = ["RootFinder", "Newton"]
 
+def f(x):
+    return x
 
 class RootFinder:
 
-    def __init__(self, function, derivative, maxIter, eps, debug=False):
+    def __init__(self, function=f, derivative=f, maxIter=10, eps=0.01, debug=False):
         self.f = function
         self.d = derivative
         self.maxIter = maxIter
         self.eps = eps
         self.debug = debug
+
 
     @property
     def f(self):
@@ -70,7 +73,7 @@ class RootFinder:
 
 class Newton(RootFinder):
 
-    def __init__(self, function, derivative, maxIter, eps, debug=False):
+    def __init__(self,function=f, derivative=f, maxIter=10, eps=0.01, debug=False):
         RootFinder.__init__(self, function, derivative, maxIter, eps,
                             debug=debug)
 
@@ -78,7 +81,7 @@ class Newton(RootFinder):
     def solve(self, guess):
 
         if self.d(guess) is 0:
-            raise ValueError("Value derivative is zero.")
+            raise ValueError("Value of derivative is zero.")
 
         for i in range(self.maxIter):
             f = self.f(guess)

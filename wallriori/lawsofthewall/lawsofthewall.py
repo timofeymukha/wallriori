@@ -40,7 +40,7 @@ class Spalding(LawOfTheWall):
     def B(self, value):
         self.__B = value
 
-    def value(self, u, y, uTau, nu):
+    def value(self, u, y, nu, uTau):
         """Return the value of the implicit function defined by the
          law"""
 
@@ -48,12 +48,13 @@ class Spalding(LawOfTheWall):
         B = self.B
 
         uPlus = u/uTau
+        yPlus = y*uTau/nu
         return (uPlus + np.exp(-kappa*B)*(np.exp(kappa*uPlus) - 1 -
                 kappa*uPlus - 0.5*(kappa*uPlus)**2 - 1./6*(kappa*uPlus)**3) -
-                y*uTau/nu)
+                yPlus)
 
 
-    def derivative(self, u, y, uTau, nu):
+    def derivative(self, u, y, nu, uTau):
         """Return the value of the derivative of the implicit function
          defined by the law"""
 
