@@ -9,7 +9,7 @@ from __future__ import print_function
 import numpy as np
 from functools import partial
 
-__all__ = ["WallModel", "LOTWWallModel"]
+__all__ = ["WallModel", "LOTWWallModel", "IntegratedLOTWWallModel"]
 
 
 class WallModel:
@@ -33,6 +33,7 @@ class WallModel:
     @nu.setter
     def nu(self, val):
         self.__nu = val
+
 
 class LOTWWallModel(WallModel):
 
@@ -72,3 +73,59 @@ class LOTWWallModel(WallModel):
         self.rootFinder.d = d
         return np.max([0, self.rootFinder.solve(guess)])
 
+
+class IntegratedLOTWWallModel(WallModel):
+
+    def __init__(self, h1, h2, nu, law, rootFinder):
+        WallModel.__init__(self, (h1 + h2)/2, nu)
+
+        self.h1 = h1
+        self.h2 = h2
+        self.law = law
+        self.rootFinder = rootFinder
+
+    @property
+    def h1(self):
+        return self.__h1
+
+    @property
+    def h2(self):
+        return self.__h2
+
+    @property
+    def law(self):
+        return self.__law
+
+    @property
+    def rootFinder(self):
+        return self.__rootFinder
+
+    @h1.setter
+    def h1(self, value):
+        self.__h1 = value
+
+    @h2.setter
+    def h2(self, value):
+        self.__h2 = value
+
+    @law.setter
+    def law(self, value):
+        self.__law = value
+
+    @rootFinder.setter
+    def rootFinder(self, value):
+        self.__rootFinder = value
+
+    def nut(self, guess, sampledU, wallGradU):
+
+        magGradU = np.abs(wallGradU)
+        uTau = self.utau(guess, sampledU)
+        return np.max([0.0, uTau**2/magGradU - self.nu])
+
+    def utau(self, guess, sampledU):
+        f = partial(self.law.value,  sampledU, self.h1, self.h2, self.nu)
+        d = partial(self.law.derivative, sampledU, self.h1, self.h2, self.nu)
+
+        self.rootFinder.f = f
+        self.rootFinder.d = d
+        return np.max([0, self.rootFinder.solve(guess)])

@@ -17,7 +17,7 @@ setup(name='wallriori',
                     'scipy',
                     'matplotlib',
                        ],
-      license="GNU GPL 3",
+      license="MIT Licence",
       classifiers=[
           "Development Status :: 4 - Beta",
           "License :: OSI Approved :: MIT Licence"

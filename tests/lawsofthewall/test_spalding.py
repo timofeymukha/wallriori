@@ -50,3 +50,8 @@ def test_spalding_derivative():
     law = Spalding()
     val = law.derivative(1, 1, 1, 1)
     assert_allclose([val], [-2.000524085538133], atol=1e-10)
+
+
+def test_spalding_explicit_value_call():
+    law = Spalding()
+    law.explicit_value(0.1, 8e-6, 5200*8e-6)
