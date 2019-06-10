@@ -15,7 +15,7 @@ def f(x):
 
 class RootFinder:
 
-    def __init__(self, function=f, derivative=f, maxIter=10, eps=0.01, debug=False):
+    def __init__(self, function=f, derivative=f, maxIter=50, eps=0.001, debug=False):
         self.f = function
         self.d = derivative
         self.maxIter = maxIter
@@ -76,7 +76,6 @@ class Newton(RootFinder):
     def __init__(self,function=f, derivative=f, maxIter=10, eps=0.01, debug=False):
         RootFinder.__init__(self, function, derivative, maxIter, eps,
                             debug=debug)
-
 
     def solve(self, guess):
 
