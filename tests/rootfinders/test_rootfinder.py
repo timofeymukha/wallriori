@@ -15,8 +15,8 @@ def f(x):
 
 def test_rootfinder_init_default():
     rootFinder = rootfinders.RootFinder()
-    assert rootFinder.eps == 0.01
-    assert rootFinder.maxIter == 10
+    assert rootFinder.eps == 0.001
+    assert rootFinder.maxIter == 50
     assert rootFinder.debug is False
 
 

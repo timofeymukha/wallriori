@@ -103,7 +103,6 @@ class Mesh:
     def nCells(self, vals):
         self.__nCells = vals
 
-
     def _compute_volumes(self):
         """Cumpute the volumes of each cell"""
         faces = self.faces
@@ -114,7 +113,7 @@ class Mesh:
         return volumes
 
     def _compute_centres(self):
-        "Compute the cell centre of each cell"
+        """Compute the cell centre of each cell"""
         faces = self.faces
 
         centres = np.zeros(faces.size - 1)
@@ -123,7 +122,7 @@ class Mesh:
         return centres
 
     def _compute_faces(self, centresAndEdges):
-        "Compute the faces from the cell centres and edges"
+        """Compute the faces from the cell centres and edges"""
         faces = np.zeros(centresAndEdges.size-1)
         for i in range(faces.size):
             if i == 0:
@@ -133,5 +132,3 @@ class Mesh:
 
             faces[i] = faces[i-1] + 2*(centresAndEdges[i] - faces[i-1])
         return faces
-
-

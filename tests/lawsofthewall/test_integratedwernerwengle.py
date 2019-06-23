@@ -32,9 +32,9 @@ def test_iww_mutate():
 
 def test_iww_value_call():
     law = IntegratedWernerWengle()
-    law.value(0.8, 0.1, 8e-6, 5200*8e-6)
+    law.value(u=0.8, h1=0, h2=0.1, nu=8e-6, uTau=5200*8e-6)
 
 
 def test_iww_derivative_call():
     law = IntegratedWernerWengle()
-    law.derivative(0.8, 0.1, 8e-6, 5200*8e-6)
+    law.derivative(u=0.8, h1=0, h2=0.1, nu=8e-6, uTau=5200*8e-6)
