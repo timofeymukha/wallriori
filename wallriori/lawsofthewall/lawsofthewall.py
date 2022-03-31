@@ -1,4 +1,4 @@
-# wThis file is part of wallriori
+# This file is part of wallriori
 # (c) Timofey Mukha
 # The code is released under the MIT Licence.
 # See LICENCE.txt and the Legal section in the README for more information
@@ -11,7 +11,7 @@ from functools import partial
 from ..rootfinders.rootfinders import Newton
 
 __all__ = ["LawOfTheWall", "Spalding", "WernerWengle", "Reichardt",
-           "IntegratedWernerWengle", "IntegratedReichardt"]
+           "IntegratedWernerWengle", "IntegratedReichardt", "CaiSagaut"]
 
 
 class LawOfTheWall:
@@ -340,9 +340,17 @@ class IntegratedReichardt(LawOfTheWall):
 
     def value(self, u, h1, h2, nu, uTau):
         """Return the value of the implicit function defined by the
-         law"""
+         law
 
-        return u*(h2 - h1) - (self.logterm(h2, uTau, nu) -
+         Parameters
+         ----------
+
+         u : float
+            The value of the velocity integrated across the h1-h2 interval
+
+         """
+
+        return u - (self.logterm(h2, uTau, nu) -
                               self.logterm(h1, uTau, nu) +
                               self.expterm(h2, uTau, nu) -
                               self.expterm(h1, uTau, nu))
@@ -388,3 +396,69 @@ class IntegratedReichardt(LawOfTheWall):
         yPlus = y*uTau/nu
 
         return C*(y - y*np.exp(-yPlus/B1) - y*yPlus/B1*np.exp(-yPlus/B2))
+
+
+class CaiSagaut(LawOfTheWall):
+
+    def __init__(self, kappa=0.4, B=5.5):
+        LawOfTheWall.__init__(self)
+        self.kappa = kappa
+        self.B = B
+
+        self.p = 1.138
+        self.s = 217.8
+
+    @property
+    def kappa(self):
+        return self._kappa
+
+    @property
+    def B(self):
+        return self._B
+
+    @property
+    def E(self):
+        return self.E
+
+    @kappa.setter
+    def kappa(self, value):
+        self._kappa = value
+
+    @B.setter
+    def B(self, value):
+        self._B = value
+
+
+    def lambert(self, x, n=4):
+        from numpy import log
+        W = log(x) - log(log(x))
+
+        for _ in range(n):
+            W = W / (1 + W) * (1 + log(x / W))
+        return W
+
+
+    def explicit_value(self, y, nu, uTau):
+        """Return the value of velocity."""
+        pass
+
+    def value(self, u, y, nu, uTau):
+        """Return the value of the implicit function defined by the
+         law."""
+        from scipy.special import lambertw as W
+        kappa = self.kappa
+        E = np.exp(kappa*self.B)
+        re = u*y/nu
+
+        f = np.exp(-re/self.s)
+
+        uplus = f**self.p*np.sqrt(re)
+        uplus += (1 - f)**self.p/kappa*np.real(self.lambert(np.maximum(kappa*E*re, np.e)))
+
+        return uTau - u/uplus
+
+    def derivative(self, u, y, nu, uTau):
+        """Return the value of the derivative of the implicit function
+         defined by the law."""
+
+        return 1

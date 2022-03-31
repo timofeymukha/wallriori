@@ -10,7 +10,8 @@ import numpy as np
 from functools import partial
 from ..lawsofthewall import Spalding
 
-__all__ = ["WallModel", "LOTWWallModel", "IntegratedLOTWWallModel", "LSQRWallModel"]
+__all__ = ["WallModel", "LinearWallModel","LOTWWallModel",
+           "IntegratedLOTWWallModel", "LSQRWallModel"]
 
 
 class WallModel:
@@ -34,6 +35,15 @@ class WallModel:
     @nu.setter
     def nu(self, val):
         self.__nu = val
+
+
+class LinearWallModel(WallModel):
+
+    def __init__(self, h, nu):
+        WallModel.__init__(self, h, nu)
+
+    def utau(self, sampledU):
+        return np.sqrt(self.nu*sampledU/self.h)
 
 
 class LOTWWallModel(WallModel):
@@ -71,7 +81,7 @@ class LOTWWallModel(WallModel):
 
         self.rootFinder.f = f
         self.rootFinder.d = d
-        return np.max([0, self.rootFinder.solve(guess)])
+        return self.rootFinder.solve(guess)
 
 
 class IntegratedLOTWWallModel(WallModel):
@@ -129,6 +139,7 @@ class IntegratedLOTWWallModel(WallModel):
         self.rootFinder.f = f
         self.rootFinder.d = d
         return np.max([0, self.rootFinder.solve(guess)])
+
 
 class LSQRWallModel(WallModel):
 
@@ -300,6 +311,5 @@ class LSQRWallModel(WallModel):
 
             if verbose:
                 print("Iteration", i, "uTau", uTau)
-
 
         return np.max([0, self.rootFinder.solve(guess)])

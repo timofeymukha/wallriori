@@ -71,16 +71,14 @@ class RootFinder:
     def debug(self, debug):
         self.__debug = debug
 
+
 class Newton(RootFinder):
 
-    def __init__(self,function=f, derivative=f, maxIter=10, eps=0.01, debug=False):
+    def __init__(self,function=f, derivative=f, maxIter=100, eps=0.001, debug=False):
         RootFinder.__init__(self, function, derivative, maxIter, eps,
                             debug=debug)
 
     def solve(self, guess):
-
-        if self.d(guess) is 0:
-            raise ValueError("Value of derivative is zero.")
 
         for i in range(self.maxIter):
             f = self.f(guess)
@@ -90,7 +88,10 @@ class Newton(RootFinder):
 
             error = np.abs(newGuess - guess)/np.abs(guess)
 
-            if error <= self.eps:
+            if np.ndim(guess) == 0:
+                if error <= self.eps:
+                    return newGuess
+            elif np.all(error <= self.eps):
                 return newGuess
 
             guess = newGuess

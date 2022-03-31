@@ -43,6 +43,13 @@ def test_integratedreichardt_value_call():
     law.value(0.8, 0.1, 0.2, 8e-6, 5200*8e-6)
 
 
+def test_integratedreichardt_value_call_multicell():
+    law = IntegratedReichardt()
+
+    v = law.value(0.2*0.4, 0.0, 0.4, 8e-6, 0.04)
+    assert(v == 0.1)
+
+
 def test_integratedreichardt_derivative_call():
     law = IntegratedReichardt()
     law.derivative(0.8, 0.1, 0.2, 8e-6, 5200*8e-6)

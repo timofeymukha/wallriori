@@ -54,14 +54,20 @@ class Problem:
         else:
             raise ValueError("The size of the data and the mesh mush match")
 
-class  SteadyDiffusion(Problem):
+
+class SteadyDiffusion(Problem):
 
     def __init__(self, mesh, ic, nu, bcLeft, bcRight, source):
         Problem.__init__(self, mesh, ic)
         self.nu = nu
         self.bcLeft = bcLeft
         self.bcRight = bcRight
-        self.source = source
+        if np.ndim(source) == 0:
+            self.source = source*np.ones(mesh.nCells)
+        elif source.size == mesh.nCells:
+            self.source = source
+        else:
+            raise ValueError("Source has incorrect dimensions", source.size, mesh.nCells)
 
     @property
     def nu(self):
@@ -99,7 +105,10 @@ class  SteadyDiffusion(Problem):
 
     @source.setter
     def source(self, val):
-        self.__source = val
+        if np.ndim(val) == 0:
+            self.__source = val*np.ones(self.mesh.nCells)
+        else:
+            self.__source = val
 
     def assemble(self):
         nCells = self.mesh.nCells
@@ -108,7 +117,6 @@ class  SteadyDiffusion(Problem):
         faces = self.mesh.faces
         nu = self.nu
         A = self.mesh.dim2*self.mesh.dim3
-        sol = self.solution
         bcLeft = self.bcLeft
         bcRight = self.bcRight
 
@@ -124,16 +132,16 @@ class  SteadyDiffusion(Problem):
             if i == 0:
                 rhs[i] = A*nuF[i]/(centres[i] - faces[0])*bcLeft[0]
                 system[i, i+1] = -A*nuF[i+1]/(centres[i+1] - centres[i])
-                system[i, i] = -system[i, i+1]  +  A*nuF[i]/(centres[i] - faces[0])
+                system[i, i] = -system[i, i+1] + A*nuF[i]/(centres[i] - faces[0])
             elif i == nCells - 1:
                 rhs[i] = A*nuF[i+1]/(faces[-1] - centres[i])*bcRight[0]
                 system[i, i-1] = -A*nuF[i]/(centres[i] - centres[i-1])
-                system[i, i] = -system[i, i-1]  +  A*nuF[i+1]/(faces[-1] - centres[i])
+                system[i, i] = -system[i, i-1] + A*nuF[i+1]/(faces[-1] - centres[i])
             else:
                 system[i, i-1] = -A*nuF[i]/(centres[i] - centres[i-1])
                 system[i, i+1] = -A*nuF[i+1]/(centres[i+1] - centres[i])
                 system[i, i] = -(system[i, i-1] + system[i, i+1])
-                rhs[i] = self.source*volumes[i]
+                rhs[i] = self.source[i]*volumes[i]
 
         return system, rhs
 

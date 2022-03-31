@@ -122,7 +122,7 @@ class Mesh:
         return centres
 
     def _compute_faces(self, centresAndEdges):
-        """Compute the faces from the cell centres and edges"""
+        """Compute the faces from the cell centres and boundary edges"""
         faces = np.zeros(centresAndEdges.size-1)
         for i in range(faces.size):
             if i == 0:
