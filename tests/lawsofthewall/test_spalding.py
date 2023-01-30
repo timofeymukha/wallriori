@@ -55,3 +55,16 @@ def test_spalding_derivative():
 def test_spalding_explicit_value_call():
     law = Spalding()
     law.explicit_value(0.1, 8e-6, 5200*8e-6)
+
+
+def test_spalding_explicit_value():
+    import numpy as np
+    law = Spalding()
+    y = np.linspace(1e-3, 1, 5000)
+
+
+    vals = np.zeros(y.size)
+    for i, yi in enumerate(y):
+        vals[i] = law.explicit_value(yi, 5e-5, 1000*5e-5)
+
+    pass

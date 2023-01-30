@@ -5,7 +5,9 @@
 
 from .wallmodels import *
 from .odewallmodels import *
+from .ablwallmodels import *
 
-__all__ = ["wallmodels", "odewallmodels"]
+__all__ = ["wallmodels", "odewallmodels", "ablwallmodels"]
 __all__.extend(wallmodels.__all__)
 __all__.extend(odewallmodels.__all__)
+__all__.extend(ablwallmodels.__all__)

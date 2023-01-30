@@ -67,7 +67,7 @@ class Spalding(LawOfTheWall):
         newton.f = f
         newton.d = d
 
-        return newton.solve(guess=5)
+        return newton.solve(guess=1)
 
     def value(self, u, y, nu, uTau):
         """Return the value of the implicit function defined by the
