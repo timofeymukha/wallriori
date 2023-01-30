@@ -43,7 +43,7 @@ class Spalding(LawOfTheWall):
     def B(self, value):
         self.__B = value
 
-    def explicit_value(self, y, nu, uTau):
+    def explicit_value(self, y, nu, uTau, kappa=0.4, B=5.5):
         """Return the value velocity."""
 
         newton = Newton(maxIter=500, eps=1e-3)
