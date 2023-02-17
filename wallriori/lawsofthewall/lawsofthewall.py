@@ -43,7 +43,7 @@ class Spalding(LawOfTheWall):
     def B(self, value):
         self.__B = value
 
-    def explicit_value(self, y, nu, uTau, kappa=0.4, B=5.5):
+    def explicit_value(self, y, nu, uTau, kappa=0.4, B=5.5, guess=1):
         """Return the value velocity."""
 
         newton = Newton(maxIter=500, eps=1e-3)
@@ -67,7 +67,7 @@ class Spalding(LawOfTheWall):
         newton.f = f
         newton.d = d
 
-        return newton.solve(guess=1)
+        return newton.solve(guess=guess)
 
     def value(self, u, y, nu, uTau):
         """Return the value of the implicit function defined by the
